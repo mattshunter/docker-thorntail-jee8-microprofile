@@ -6,7 +6,7 @@ Unit-integration tests are ran against an H2 in-memory database.
 
 # Integrated frameworks:
 
-- Thorntail 2.2.1
+- Thorntail 2.4.0
 - Docker container built via Fabric8 Docker Maven Plugin
 - Remote debugging in Docker container
 - Lombok (add plugin to your IDE)

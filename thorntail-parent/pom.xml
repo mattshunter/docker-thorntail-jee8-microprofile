@@ -11,8 +11,8 @@
 
     <properties>
         <browser>phantomjs</browser>
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
+        <maven.compiler.source>11</maven.compiler.source>
+        <maven.compiler.target>11</maven.compiler.target>
         <failOnMissingWebXml>false</failOnMissingWebXml>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
@@ -23,7 +23,7 @@
 
         <!-- JEE / Thorntail -->
         <javaee-api.version>8.0</javaee-api.version>
-        <thorntail.version>2.2.1.Final</thorntail.version>
+        <thorntail.version>2.4.0.Final</thorntail.version>
 
         <!-- Microprofile extensions -->
         <healthprobe-system.version>1.0.5</healthprobe-system.version>
@@ -32,8 +32,8 @@
         <swagger-ui.version>1.0.1</swagger-ui.version>
 
         <!-- Generic libraries -->
-        <lombok.version>1.18.4</lombok.version>
-        <slf4j.version>1.7.25</slf4j.version>
+        <lombok.version>1.18.6</lombok.version>
+        <slf4j.version>1.7.26</slf4j.version>
 
         <!-- Databases -->
         <hibernate.version>5.1.16.Final</hibernate.version>
@@ -59,6 +59,14 @@
 
         <pluginManagement>
             <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>3.8.0</version>
+                    <configuration>
+                        <release>${maven.compiler.source}</release>
+                    </configuration>
+                </plugin>
 
                 <plugin>
                     <groupId>io.thorntail</groupId>
@@ -139,6 +147,28 @@
                 <artifactId>javaee-api</artifactId>
                 <version>${javaee-api.version}</version>
             </dependency>
+
+            <!-- Needed for Java 11 --> 
+
+            <dependency>
+                <groupId>javax.xml.bind</groupId>
+                <artifactId>jaxb-api</artifactId>
+                <version>2.3.0</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.glassfish.jaxb</groupId>
+                <artifactId>jaxb-runtime</artifactId>
+                <version>2.3.2</version>
+                <scope>runtime</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>com.sun.activation</groupId>
+                <artifactId>jakarta.activation</artifactId>
+                <version>1.2.1</version>
+                <scope>runtime</scope>
+            </dependency> 
 
             <!-- Thorntail -->
 
@@ -298,6 +328,24 @@
             <scope>provided</scope>
         </dependency>
 
+        <!-- Needed for Java 11 -->
+
+        <dependency>
+           <groupId>javax.xml.bind</groupId>
+           <artifactId>jaxb-api</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.glassfish.jaxb</groupId>
+            <artifactId>jaxb-runtime</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.sun.activation</groupId>
+            <artifactId>jakarta.activation</artifactId>
+        </dependency>
+
+
         <!-- Thorntail runner for IDE -->
 
         <dependency>
@@ -456,7 +504,7 @@
                                         <cmd>-Shttps -Sh2</cmd>
                                     </run>
                                     <build>
-                                        <from>openjdk:8-jre</from>
+                                        <from>openjdk:11-jre</from>
                                         <tags>
                                             <tag>${project.version}</tag>
                                         </tags>
@@ -487,8 +535,7 @@
                                                 <arg>/usr/bin/java</arg>
                                                 <arg>-Djava.net.preferIPv4Stack=true</arg>
                                                 <arg>-Djava.security.egd=file:/dev/./urandom</arg>
-                                                <arg>-XX:+UnlockExperimentalVMOptions</arg>
-                                                <arg>-XX:+UseCGroupMemoryLimitForHeap</arg>
+                                                <arg>-XX:+UseContainerSupport</arg>
                                                 <arg>-XX:MaxRAMFraction=1</arg>
                                                 <arg>-jar", "${project.build.finalName}-thorntail.jar</arg>
                                             </exec>
@@ -521,7 +568,6 @@
                         </executions>
                     </plugin>
                 </plugins>
-
             </build>
         </profile>
     </profiles>
